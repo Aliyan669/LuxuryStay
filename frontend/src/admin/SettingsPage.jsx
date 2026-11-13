@@ -33,13 +33,13 @@ export default function SettingsPage() {
         {saved && <div className="alert success">Settings saved!</div>}
 
         <label>Hotel Name</label>
-        <input value={form.hotelName} onChange={(e) => setForm({ ...form, hotelName: e.target.value })} />
+        <input value={form.hotelName} onChange={(e) => setForm((f) => ({ ...f, hotelName: e.target.value }))} />
 
         <div style={{ margin: "14px 0" }}>
           <ImageUpload
             label="Website Logo"
             value={form.logoUrl}
-            onChange={(url) => setForm({ ...form, logoUrl: url })}
+            onChange={(url) => setForm((f) => ({ ...f, logoUrl: url }))}
           />
         </div>
 
@@ -47,22 +47,22 @@ export default function SettingsPage() {
           <ImageUpload
             label="Favicon (browser tab icon)"
             value={form.faviconUrl}
-            onChange={(url) => setForm({ ...form, faviconUrl: url })}
+            onChange={(url) => setForm((f) => ({ ...f, faviconUrl: url }))}
           />
         </div>
 
         <label>Tax Percentage (%)</label>
-        <input type="number" value={form.taxPercent} onChange={(e) => setForm({ ...form, taxPercent: Number(e.target.value) })} />
+        <input type="number" value={form.taxPercent} onChange={(e) => setForm((f) => ({ ...f, taxPercent: Number(e.target.value) }))} />
 
         <label>Check-In Time</label>
-        <input value={form.checkInTime} onChange={(e) => setForm({ ...form, checkInTime: e.target.value })} />
+        <input value={form.checkInTime} onChange={(e) => setForm((f) => ({ ...f, checkInTime: e.target.value }))} />
 
         <label>Check-Out Time</label>
-        <input value={form.checkOutTime} onChange={(e) => setForm({ ...form, checkOutTime: e.target.value })} />
+        <input value={form.checkOutTime} onChange={(e) => setForm((f) => ({ ...f, checkOutTime: e.target.value }))} />
 
         <label>Cancellation Policy</label>
         <textarea rows="3" value={form.cancellationPolicy}
-          onChange={(e) => setForm({ ...form, cancellationPolicy: e.target.value })} />
+          onChange={(e) => setForm((f) => ({ ...f, cancellationPolicy: e.target.value }))} />
 
         <button className="btn btn-gold">Save Settings</button>
         <p className="muted small" style={{ marginTop: 10 }}>

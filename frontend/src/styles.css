@@ -431,6 +431,37 @@ img { max-width: 100%; }
   color: var(--text);
   border-color: transparent;
 }
+/* image URL paste karne ka option */
+.link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: 2px;
+  color: var(--gold-2);
+  font-size: .76rem;
+  letter-spacing: .5px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.link-btn:hover { color: var(--gold); }
+.url-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.url-row input { margin: 0; }
+.url-row .btn { padding: 10px 16px; white-space: nowrap; }
+/* admin table me chhota thumbnail */
+.room-thumb {
+  width: 52px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  display: block;
+}
 .room-body { padding: 18px 20px 20px; }
 .room-head { display: flex; justify-content: space-between; align-items: baseline; }
 .room-head h3 { font-size: 1.45rem; }

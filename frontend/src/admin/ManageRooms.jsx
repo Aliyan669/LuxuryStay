@@ -22,14 +22,16 @@ export default function ManageRooms() {
   const [form, setForm] = useState(emptyRoom);
   const [editId, setEditId] = useState(null);
   const [error, setError] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const load = () => api.get("/rooms").then((res) => setRooms(res.data));
   useEffect(() => { load(); }, []);
 
   const openAdd = () => {
-    setForm(emptyRoom);
+    setForm({ ...emptyRoom });
     setEditId(null);
     setError("");
+    setUploading(false);
     setShowModal(true);
   };
 
@@ -37,13 +39,16 @@ export default function ManageRooms() {
     setForm({ ...room, amenities: room.amenities.join(", ") });
     setEditId(room._id);
     setError("");
+    setUploading(false);
     setShowModal(true);
   };
 
   const submit = async (e) => {
     e.preventDefault();
+    if (uploading) return;
     const body = {
       ...form,
+      image: form.image || "",
       price: Number(form.price),
       capacity: Number(form.capacity),
       amenities: form.amenities.split(",").map((a) => a.trim()).filter(Boolean),
@@ -96,40 +101,41 @@ export default function ManageRooms() {
               <div>
                 <label>Room Number</label>
                 <input placeholder="e.g. 105" value={form.roomNumber}
-                  onChange={(e) => setForm({ ...form, roomNumber: e.target.value })} required />
+                  onChange={(e) => setForm((f) => ({ ...f, roomNumber: e.target.value }))} required />
               </div>
               <div>
                 <label>Room Type</label>
-                <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
+                <select value={form.type} onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))}>
                   {["Standard", "Deluxe", "Executive", "Suite", "Presidential"].map((t) => <option key={t}>{t}</option>)}
                 </select>
               </div>
               <div>
                 <label>Price / Night</label>
                 <input type="number" placeholder="2500" value={form.price}
-                  onChange={(e) => setForm({ ...form, price: e.target.value })} required />
+                  onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))} required />
               </div>
               <div>
                 <label>Capacity</label>
                 <input type="number" placeholder="2" value={form.capacity}
-                  onChange={(e) => setForm({ ...form, capacity: e.target.value })} />
+                  onChange={(e) => setForm((f) => ({ ...f, capacity: e.target.value }))} />
               </div>
             </div>
             <label>Amenities (comma separated)</label>
             <input placeholder="AC, WiFi, TV, Mini Bar" value={form.amenities}
-              onChange={(e) => setForm({ ...form, amenities: e.target.value })} />
+              onChange={(e) => setForm((f) => ({ ...f, amenities: e.target.value }))} />
             <label>Description</label>
             <input placeholder="Short description of the room" value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })} />
+              onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} />
             <div style={{ marginTop: 10 }}>
               <ImageUpload
                 label="Room Image"
                 value={form.image}
-                onChange={(url) => setForm({ ...form, image: url })}
+                onUploading={setUploading}
+                onChange={(url) => setForm((f) => ({ ...f, image: url }))}
               />
             </div>
-            <button className="btn btn-gold btn-block">
-              {editId ? "Update Room" : "Add Room"}
+            <button className="btn btn-gold btn-block" disabled={uploading}>
+              {uploading ? "Image uploading..." : editId ? "Update Room" : "Add Room"}
             </button>
           </form>
         </Modal>
@@ -139,13 +145,20 @@ export default function ManageRooms() {
         <table>
           <thead>
             <tr>
-              <th>Room</th><th>Type</th><th>Price</th><th>Capacity</th><th>Status</th><th>Change Status</th><th>Actions</th>
+              <th>Room</th><th>Image</th><th>Type</th><th>Price</th><th>Capacity</th><th>Status</th><th>Change Status</th><th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {rooms.map((room) => (
               <tr key={room._id}>
                 <td><b>#{room.roomNumber}</b></td>
+                <td>
+                  {room.image ? (
+                    <img src={room.image} alt={"Room " + room.roomNumber} className="room-thumb" />
+                  ) : (
+                    <span className="muted small">No image</span>
+                  )}
+                </td>
                 <td>{room.type}</td>
                 <td>{money(room.price)}</td>
                 <td>{room.capacity}</td>
