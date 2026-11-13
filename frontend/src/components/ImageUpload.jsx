@@ -78,7 +78,7 @@ export default function ImageUpload({ value, onChange, label = "Image", onUpload
           className="link-btn"
           onClick={() => { setShowUrl(true); setError(""); }}
         >
-          Ya image ka URL paste karo
+          Image URL
         </button>
       ) : (
         <div className="url-row">
